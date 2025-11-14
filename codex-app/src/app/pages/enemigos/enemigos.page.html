@@ -9,20 +9,36 @@
     <div class="codex-card">
       <h2 class="codex-title">Amenazas del Nexo</h2>
       <p class="codex-subtitle">
-        Criaturas y facciones que se alimentan de los ecos o los protegen.
+        Comportamientos y sprites sincronizados desde el Códex del sitio.
       </p>
     </div>
 
-    <div class="grid-cards">
-      <div class="enemy-card" *ngFor="let e of enemigos">
-        <h3>{{ e.nombre }}</h3>
-        <p class="enemy-meta">
-          {{ e.tipo }} · {{ e.dominio }}
-        </p>
-        <p class="enemy-text">
-          {{ e.resumen }}
-        </p>
-      </div>
-    </div>
+    <ion-list class="codex-list" style="margin-top: 1rem">
+      <ng-container *ngIf="enemigos$ | async as enemigos; else loading">
+        <ion-item *ngFor="let e of enemigos">
+          <ion-avatar
+            slot="start"
+            *ngIf="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl"
+          >
+            <img
+              [src]="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl"
+              [alt]="e.name"
+            />
+          </ion-avatar>
+
+          <ion-label>
+            <h2>{{ e.name }}</h2>
+            <p>{{ e.description }}</p>
+            <p style="font-size: 0.7rem; opacity: 0.7">
+              Dominio: {{ e.domainId || 'desconocido' }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+
+      <ng-template #loading>
+        <p style="margin-top: 1rem; opacity: 0.7">Cargando enemigos...</p>
+      </ng-template>
+    </ion-list>
   </div>
 </ion-content>

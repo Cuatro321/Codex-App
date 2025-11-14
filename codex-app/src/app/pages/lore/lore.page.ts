@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CodexService, Story, Domain } from '../../services/codex.service';
 
 @Component({
   standalone:false,
@@ -7,22 +9,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lore.page.scss'],
 })
 export class LorePage implements OnInit {
-  historias = [
-    {
-      titulo: 'La historia de la batalla de los guerreros',
-      resumen:
-        'Hace muchos años en estos territorios se llevó a cabo una gran batalla entre naciones donde solo una resultó vencedora.',
-      imagen: 'assets/historias/historia-1.jpg',
-    },
-  ];
+  historias$!: Observable<Story[]>;
+  dominios$!: Observable<Domain[]>;
 
-  dominios = [
-    { nombre: 'Dominio del Tiempo' },
-    { nombre: 'Pradera del Amanecer' },
-    { nombre: 'Ciudad Abisal' },
-  ];
+  constructor(private codex: CodexService) {}
 
-  constructor() {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.historias$ = this.codex.getStories();
+    this.dominios$ = this.codex.getDomains();
+  }
 }

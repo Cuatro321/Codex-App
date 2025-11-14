@@ -18,3 +18,16 @@
     font-weight: 700;
   }
 }
+:host {
+  display: block;
+
+  ion-content {
+    --padding-bottom: 80px;
+  }
+
+  ion-content::part(scroll),
+  ion-content .inner-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -13,12 +13,22 @@
       </p>
     </div>
 
-    <div class="grid-cards">
-      <div class="dom-card" *ngFor="let d of dominios">
-        <h3>{{ d.nombre }}</h3>
-        <p class="dom-meta">{{ d.tipo }}</p>
-        <p class="dom-text">{{ d.descripcion }}</p>
+    <div class="domain-list" *ngIf="dominios$ | async as dominios; else loading">
+      <div class="domain-card" *ngFor="let d of dominios">
+        <div class="domain-cover" *ngIf="d.coverImageUrl">
+          <img [src]="d.coverImageUrl" [alt]="d.name" />
+        </div>
+        <div class="domain-body">
+          <h3>{{ d.name }}</h3>
+          <p class="domain-subtitle">
+            {{ d.shortDescription || 'Sin descripción' }}
+          </p>
+        </div>
       </div>
     </div>
+
+    <ng-template #loading>
+      <p style="margin-top: 1rem; opacity: 0.7">Cargando dominios...</p>
+    </ng-template>
   </div>
 </ion-content>

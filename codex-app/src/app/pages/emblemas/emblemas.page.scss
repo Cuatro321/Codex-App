@@ -19,3 +19,16 @@ codex-list img {
   object-fit: cover;
   border-radius: 8px;
 }
+:host {
+  display: block;
+
+  ion-content {
+    --padding-bottom: 80px;
+  }
+
+  ion-content::part(scroll),
+  ion-content .inner-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -1,61 +1,64 @@
 <ion-header translucent="true">
   <ion-toolbar class="nexo-toolbar">
-    <ion-title class="nexo-brand">
-      Códex del Nexo
-    </ion-title>
+    <ion-title class="nexo-brand">Códex del Nexo</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen="true">
   <div class="ion-padding">
-    <ion-grid fixed>
-      <ion-row>
-        <!-- Izquierda -->
-        <ion-col size="12" sizeLg="8">
-          <div class="codex-card">
-            <h2 class="codex-title">Códex del Nexo</h2>
-            <p class="codex-subtitle">
-              Historias, personajes, enemigos, dominios, artefactos y guías estratégicas. Todo el
-              lore y contenido jugable en un solo lugar.
-            </p>
-          </div>
+    <!-- Intro -->
+    <div class="codex-card">
+      <h2 class="codex-title">Códex del Nexo</h2>
+      <p class="codex-subtitle">
+        Historias, personajes, enemigos, dominios, artefactos y guías
+        estratégicas. Todo el lore y contenido jugable en un solo lugar.
+      </p>
+    </div>
 
-          <div class="codex-card section-card">
-            <div class="section-header">
-              <ion-icon name="book-outline"></ion-icon>
-              <h3>Últimas historias</h3>
-            </div>
+    <!-- Últimas historias -->
+    <div class="codex-card" style="margin-top: 1.5rem">
+      <div class="codex-card-header">
+        <h3>📖 Últimas historias</h3>
+      </div>
 
-            <ion-list class="codex-list">
-              <ion-item *ngFor="let h of historias">
-                <ion-thumbnail slot="start">
-                  <img [src]="h.imagen" alt="{{ h.titulo }}" />
-                </ion-thumbnail>
-                <ion-label>
-                  <h2>{{ h.titulo }}</h2>
-                  <p>{{ h.resumen }}</p>
-                </ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-col>
+      <ng-container *ngIf="historias$ | async as historias; else loadingHistorias">
+        <ion-list class="codex-list">
+          <ion-item *ngFor="let h of historias">
+            <ion-thumbnail slot="start" *ngIf="h.coverImageUrl">
+              <img [src]="h.coverImageUrl" [alt]="h.title" />
+            </ion-thumbnail>
 
-        <!-- Derecha -->
-        <ion-col size="12" sizeLg="4">
-          <div class="codex-card section-card">
-            <div class="section-header">
-              <ion-icon name="business-outline"></ion-icon>
-              <h3>Dominios</h3>
-            </div>
+            <ion-label>
+              <h2>{{ h.title }}</h2>
+              <p>{{ h.summary }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
 
-            <ion-list class="codex-list">
-              <ion-item *ngFor="let d of dominios">
-                <ion-label>{{ d.nombre }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      <ng-template #loadingHistorias>
+        <p style="margin-top: 0.5rem; opacity: 0.7">Cargando historias...</p>
+      </ng-template>
+    </div>
+
+    <!-- Dominios destacados -->
+    <div class="codex-card" style="margin-top: 1.5rem">
+      <div class="codex-card-header">
+        <h3>🏛️ Dominios</h3>
+      </div>
+
+      <div
+        class="domain-chips"
+        *ngIf="dominios$ | async as dominios; else loadingDominios"
+      >
+        <button class="domain-chip" *ngFor="let d of dominios">
+          {{ d.name }}
+        </button>
+      </div>
+
+      <ng-template #loadingDominios>
+        <p style="margin-top: 0.5rem; opacity: 0.7">Cargando dominios...</p>
+      </ng-template>
+    </div>
   </div>
 </ion-content>

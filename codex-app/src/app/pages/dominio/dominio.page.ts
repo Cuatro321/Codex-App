@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Dominio {
-  nombre: string;
-  tipo: string;
-  descripcion: string;
-}
+import { Observable } from 'rxjs';
+import { CodexService, Domain } from '../../services/codex.service';
 
 @Component({
   standalone:false,
@@ -13,21 +9,11 @@ interface Dominio {
   styleUrls: ['./dominio.page.scss'],
 })
 export class DominioPage implements OnInit {
-  dominios: Dominio[] = [
-    {
-      nombre: 'Dominio del Tiempo',
-      tipo: 'Temporal',
-      descripcion: 'Relojes rotos flotan en el cielo. Cada paso altera segundos olvidados.',
-    },
-    {
-      nombre: 'Pradera del Amanecer',
-      tipo: 'Luz',
-      descripcion:
-        'Un amanecer permanente que oculta ecos de noches que ya no existen.',
-    },
-  ];
+  dominios$!: Observable<Domain[]>;
 
-  constructor() {}
+  constructor(private codex: CodexService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.dominios$ = this.codex.getDomains();
+  }
 }
