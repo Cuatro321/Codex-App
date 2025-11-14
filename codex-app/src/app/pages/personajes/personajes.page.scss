@@ -1,0 +1,36 @@
+.grid-cards {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.char-card {
+  background: linear-gradient(180deg, rgba(7,10,14,0.9), rgba(3,6,9,0.6));
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.char-header {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.char-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.char-meta {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-top: 0.1rem;
+}
+
+.char-text {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  opacity: 0.95;
+}

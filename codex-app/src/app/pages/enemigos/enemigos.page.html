@@ -1,0 +1,28 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-title class="nexo-brand">Enemigos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="ion-padding">
+    <div class="codex-card">
+      <h2 class="codex-title">Amenazas del Nexo</h2>
+      <p class="codex-subtitle">
+        Criaturas y facciones que se alimentan de los ecos o los protegen.
+      </p>
+    </div>
+
+    <div class="grid-cards">
+      <div class="enemy-card" *ngFor="let e of enemigos">
+        <h3>{{ e.nombre }}</h3>
+        <p class="enemy-meta">
+          {{ e.tipo }} · {{ e.dominio }}
+        </p>
+        <p class="enemy-text">
+          {{ e.resumen }}
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

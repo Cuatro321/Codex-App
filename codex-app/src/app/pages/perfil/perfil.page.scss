@@ -1,0 +1,74 @@
+.auth-card {
+  margin-top: 1rem;
+}
+
+.auth-btn {
+  margin-top: 1rem;
+}
+
+.error-text {
+  margin-top: 0.75rem;
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+/* Perfil */
+
+.profile-header {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-main {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  border: 2px solid rgba(56, 189, 248, 0.7);
+}
+
+.profile-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.profile-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.profile-meta {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.profile-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

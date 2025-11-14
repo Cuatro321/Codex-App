@@ -1,0 +1,24 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-title class="nexo-brand">Dominios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="ion-padding">
+    <div class="codex-card">
+      <h2 class="codex-title">Dominios del Nexo</h2>
+      <p class="codex-subtitle">
+        Regiones donde los ecos toman forma y alteran las reglas del mundo.
+      </p>
+    </div>
+
+    <div class="grid-cards">
+      <div class="dom-card" *ngFor="let d of dominios">
+        <h3>{{ d.nombre }}</h3>
+        <p class="dom-meta">{{ d.tipo }}</p>
+        <p class="dom-text">{{ d.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

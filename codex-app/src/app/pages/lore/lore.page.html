@@ -1,0 +1,61 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-title class="nexo-brand">
+      Códex del Nexo
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="ion-padding">
+    <ion-grid fixed>
+      <ion-row>
+        <!-- Izquierda -->
+        <ion-col size="12" sizeLg="8">
+          <div class="codex-card">
+            <h2 class="codex-title">Códex del Nexo</h2>
+            <p class="codex-subtitle">
+              Historias, personajes, enemigos, dominios, artefactos y guías estratégicas. Todo el
+              lore y contenido jugable en un solo lugar.
+            </p>
+          </div>
+
+          <div class="codex-card section-card">
+            <div class="section-header">
+              <ion-icon name="book-outline"></ion-icon>
+              <h3>Últimas historias</h3>
+            </div>
+
+            <ion-list class="codex-list">
+              <ion-item *ngFor="let h of historias">
+                <ion-thumbnail slot="start">
+                  <img [src]="h.imagen" alt="{{ h.titulo }}" />
+                </ion-thumbnail>
+                <ion-label>
+                  <h2>{{ h.titulo }}</h2>
+                  <p>{{ h.resumen }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-col>
+
+        <!-- Derecha -->
+        <ion-col size="12" sizeLg="4">
+          <div class="codex-card section-card">
+            <div class="section-header">
+              <ion-icon name="business-outline"></ion-icon>
+              <h3>Dominios</h3>
+            </div>
+
+            <ion-list class="codex-list">
+              <ion-item *ngFor="let d of dominios">
+                <ion-label>{{ d.nombre }}</ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

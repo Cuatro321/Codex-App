@@ -4,36 +4,65 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        path: 'home',
+        loadChildren: () =>
+          import('../pages/home/home.module').then(m => m.HomePageModule),
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'lore',
+        loadChildren: () =>
+          import('../pages/lore/lore.module').then(m => m.LorePageModule),
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'personajes',
+        loadChildren: () =>
+          import('../pages/personajes/personajes.module').then(
+            m => m.PersonajesPageModule,
+          ),
+      },
+      {
+        path: 'enemigos',
+        loadChildren: () =>
+          import('../pages/enemigos/enemigos.module').then(
+            m => m.EnemigosPageModule,
+          ),
+      },
+      {
+        path: 'emblemas',
+        loadChildren: () =>
+          import('../pages/emblemas/emblemas.module').then(
+            m => m.EmblemasPageModule,
+          ),
+      },
+      {
+        path: 'dominio',
+        loadChildren: () =>
+          import('../pages/dominio/dominio.module').then(
+            m => m.DominioPageModule,
+          ),
+      },
+      {
+        path: 'perfil',
+        loadChildren: () =>
+          import('../pages/perfil/perfil.module').then(
+            m => m.PerfilPageModule,
+          ),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
-        pathMatch: 'full'
-      }
-    ]
+        redirectTo: '/tabs/home',
+        pathMatch: 'full',
+      },
+    ],
   },
-  {
-    path: '',
-    redirectTo: '/tabs/tab1',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class TabsPageRoutingModule {}

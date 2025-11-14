@@ -1,0 +1,37 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-title class="nexo-brand">Personajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="ion-padding">
+    <div class="codex-card">
+      <h2 class="codex-title">Portadores y figuras clave</h2>
+      <p class="codex-subtitle">Se sincroniza con el Códex del Nexo en tu sitio.</p>
+    </div>
+
+    <div class="grid-cards" style="margin-top: 1rem;">
+      <ng-container *ngIf="personajes$ | async as personajes; else loading">
+        <div class="char-card" *ngFor="let p of personajes">
+          <div class="char-header">
+            <img *ngIf="p.imageUrl" [src]="p.imageUrl" class="char-avatar" [alt]="p.name" />
+            <div>
+              <h3>{{ p.name }}</h3>
+              <p class="char-meta">
+                {{ p.role || 'Rol desconocido' }} · {{ p.domainId || 'Dominio desconocido' }}
+              </p>
+            </div>
+          </div>
+          <p class="char-text">
+            {{ p.description || 'Sin descripción' }}
+          </p>
+        </div>
+      </ng-container>
+
+      <ng-template #loading>
+        <p style="margin-top: 1rem; opacity: 0.7;">Cargando personajes…</p>
+      </ng-template>
+    </div>
+  </div>
+</ion-content>

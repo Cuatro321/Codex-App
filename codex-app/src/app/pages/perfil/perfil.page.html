@@ -1,0 +1,69 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-title class="nexo-brand">Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="ion-padding">
+    <ng-container *ngIf="user$ | async as user; else authForm">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </div>
+        <h2>{{ user.email }}</h2>
+        <p class="muted">Conectado al Nexo</p>
+
+        <ion-button expand="block" color="danger" (click)="logout()">
+          Cerrar sesión
+        </ion-button>
+      </div>
+    </ng-container>
+
+    <ng-template #authForm>
+      <div class="auth-card">
+        <ion-segment [(ngModel)]="mode" value="login">
+          <ion-segment-button value="login">
+            <ion-label>Iniciar sesión</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="register">
+            <ion-label>Crear cuenta</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <ion-list lines="none" style="margin-top: 1rem;">
+          <ion-item>
+            <ion-label position="stacked">Correo electrónico</ion-label>
+            <ion-input
+              type="email"
+              [(ngModel)]="email"
+              placeholder="eco@nexo.com"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Contraseña</ion-label>
+            <ion-input
+              type="password"
+              [(ngModel)]="password"
+              placeholder="••••••••"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="errorMessage" class="error-msg">
+          {{ errorMessage }}
+        </div>
+
+        <ion-button
+          expand="block"
+          color="warning"
+          (click)="submit()"
+          [disabled]="loading"
+        >
+          {{ mode === 'login' ? 'Entrar' : 'Crear cuenta' }}
+        </ion-button>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

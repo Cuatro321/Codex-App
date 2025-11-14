@@ -1,0 +1,29 @@
+.grid-cards {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dom-card {
+  background: radial-gradient(circle at top, #111827 0%, #020617 60%);
+  border-radius: 1.3rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+}
+
+.dom-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dom-meta {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-top: 0.2rem;
+}
+
+.dom-text {
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
+  opacity: 0.9;
+}
