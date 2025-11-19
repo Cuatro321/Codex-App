@@ -16,7 +16,7 @@ export interface UserProfile {
   createdAt: any;
   avatarUrl?: string;
 
-  // Para empatar con Django
+
   isStaff?: boolean;
   isSuperuser?: boolean;
   isActive?: boolean;

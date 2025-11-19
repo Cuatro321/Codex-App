@@ -1,0 +1,29 @@
+:host {
+  ion-menu {
+    --width: 260px;
+  }
+
+  ion-content {
+    --background: #020617;
+  }
+
+  ion-list-header {
+    margin-top: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #e5e7eb;
+    border-radius: 999px;
+    margin-bottom: 4px;
+  }
+
+  ion-item:hover {
+    --background: rgba(15, 23, 42, 0.95);
+  }
+}

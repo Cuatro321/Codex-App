@@ -17,8 +17,6 @@ import {
 /* ==========
  * Interfaces
  * ========== */
-
-// Lo que ya tenías
 export interface Emblem {
   id?: string;
   name: string;
@@ -46,7 +44,7 @@ export interface Character {
   gifUrl?: string;
 }
 
-/* Nuevos tipos del Códex */
+
 
 export interface Asset {
   id?: string | number;
@@ -128,7 +126,7 @@ export class CodexService {
   private db: Firestore;
 
   constructor() {
-    // REUTILIZAR app si ya existe (por AngularFire)
+  
     if (!getApps().length) {
       this.app = initializeApp(environment.firebase);
     } else {
@@ -138,7 +136,7 @@ export class CodexService {
     this.db = getFirestore(this.app);
   }
 
-  /** Helper genérico para leer colecciones */
+
   private collection$<T>(path: string, orderField?: string): Observable<T[]> {
     const colRef = collection(this.db, path);
     const q = orderField ? query(colRef, orderBy(orderField, 'asc')) : colRef;
@@ -163,14 +161,13 @@ export class CodexService {
     return this.collection$<Character>('characters', 'name');
   }
 
-  // --- Nuevas colecciones del Códex ---
 
   getAssets(): Observable<Asset[]> {
     return this.collection$<Asset>('assets', 'id');
   }
 
   getDomains(): Observable<Domain[]> {
-    // ordenado por "order" como en el admin
+  
     return this.collection$<Domain>('domains', 'order');
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CodexService, Emblem } from '../../services/codex.service';
 import firebase from 'firebase/compat/app';
-import { AuthPageModule } from '../auth/auth.module';
 
 @Component({
   standalone: false,
