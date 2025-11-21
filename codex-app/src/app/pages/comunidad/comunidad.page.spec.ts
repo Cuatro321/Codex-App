@@ -2,20 +2,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { HomePage } from './home.page';
+import { ComunidadPage } from './comunidad.page';
 
-describe('HomePage', () => {
-  let component: HomePage;
-  let fixture: ComponentFixture<HomePage>;
+describe('ComunidadPage', () => {
+  let component: ComunidadPage;
+  let fixture: ComponentFixture<ComunidadPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomePage],
+      declarations: [ComunidadPage],
       imports: [CommonModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HomePage);
+    fixture = TestBed.createComponent(ComunidadPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

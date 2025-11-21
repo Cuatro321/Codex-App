@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, from, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-// SDK Firebase Web (modular)
+
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import {
   getFirestore,
@@ -151,7 +151,7 @@ export class CodexService {
     );
   }
 
-  // --- Lo que ya funcionaba ---
+  
 
   getEmblems(): Observable<Emblem[]> {
     return this.collection$<Emblem>('emblems', 'name');
