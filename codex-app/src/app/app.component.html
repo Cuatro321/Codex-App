@@ -19,6 +19,8 @@
             *ngFor="let item of section.items"
             [routerLink]="item.ruta"
             routerDirection="root"
+            routerLinkActive="menu-item-active"
+            [routerLinkActiveOptions]="{ exact: true }"
             lines="none"
           >
             <ion-icon [name]="item.icono" slot="start"></ion-icon>

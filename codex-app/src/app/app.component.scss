@@ -1,29 +1,113 @@
 :host {
+  /* ===== Menú lateral ===== */
   ion-menu {
-    --width: 260px;
+    --width: 270px;
+    background: #020617;
+  }
+
+  ion-header {
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+  }
+
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    --border-width: 0;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
   }
 
   ion-content {
     --background: #020617;
+    --padding-top: env(safe-area-inset-top);
+    --padding-bottom: 1.5rem;
+  }
+
+  ion-list {
+    padding-top: 0.4rem;
+    padding-bottom: 0.8rem;
   }
 
   ion-list-header {
     margin-top: 0.75rem;
-    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.9);
+    color: rgba(148, 163, 184, 0.95);
   }
+
+  /* ===== Items de menú ===== */
 
   ion-item {
     --background: transparent;
     --color: #e5e7eb;
-    border-radius: 999px;
-    margin-bottom: 4px;
+
+    border-radius: 16px;
+    margin: 2px 0;
+    min-height: 50px;
+
+    --padding-start: 14px;
+    --inner-padding-end: 14px;
+
+    transition:
+      background-color 150ms ease-out,
+      transform 120ms ease-out,
+      box-shadow 150ms ease-out,
+      color 150ms ease-out;
   }
 
+  /* Iconos blancos y más grandes */
+  ion-item ion-icon {
+    font-size: 1.35rem;
+    color: inherit;
+    opacity: 0.9;
+  }
+
+  /* Texto cómodo para APK */
+  ion-item ion-label {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  /* Hover / tap (más sobrio) */
   ion-item:hover {
-    --background: rgba(15, 23, 42, 0.95);
+    --background: rgba(15, 23, 42, 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.65);
+  }
+
+  ion-item:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ===== Item ACTIVO =====
+     (routerLinkActive="menu-item-active") */
+
+  ion-item.menu-item-active {
+    /* fondo discreto con un poco de profundidad */
+    --background: linear-gradient(135deg, #111827, #020617);
+    --color: #f9fafb;
+
+    /* “barra” de acento a la izquierda */
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: var(--ion-color-primary);
+
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.5);
+    transform: translateY(-1px);
+  }
+
+  ion-item.menu-item-active ion-icon {
+    color: var(--ion-color-primary);
+    opacity: 1;
+  }
+
+  ion-item.menu-item-active ion-label {
+    font-weight: 600;
   }
 }

@@ -9,4 +9,5 @@ export const environment = {
     appId: '1:236842325494:web:b4bd9953c0c2c43b3e23d7',
     measurementId: 'G-LTX6XXQT17',
   },
+    backendBaseUrl: 'https://elnexodelosecos.pythonanywhere.com',
 };
