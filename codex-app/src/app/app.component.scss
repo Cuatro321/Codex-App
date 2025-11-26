@@ -6,16 +6,51 @@
   }
 
   ion-header {
+    /* redondeo suave abajo para que parezca tarjeta */
+    border-radius: 0 0 24px 0;
+    overflow: hidden;
     box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
   }
 
+  /* ===== Toolbar con temas según sección ===== */
   ion-toolbar {
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-primary-contrast);
     --border-width: 0;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  ion-title {
     font-weight: 700;
     font-size: 1.05rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* Tema por sección */
+  ion-toolbar.header-principal {
+    --background: linear-gradient(135deg, #fbbf24, #f97316);
+    --color: #020617;
+  }
+
+  ion-toolbar.header-codex {
+    --background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    --color: #f9fafb;
+  }
+
+  ion-toolbar.header-comunidad {
+    --background: linear-gradient(135deg, #a855f7, #ec4899);
+    --color: #fdf2ff;
+  }
+
+  ion-toolbar.header-perfil {
+    --background: linear-gradient(135deg, #22c55e, #16a34a);
+    --color: #022c22;
   }
 
   ion-content {
@@ -59,21 +94,18 @@
       color 150ms ease-out;
   }
 
-  /* Iconos blancos y más grandes */
   ion-item ion-icon {
     font-size: 1.35rem;
     color: inherit;
     opacity: 0.9;
   }
 
-  /* Texto cómodo para APK */
   ion-item ion-label {
     font-size: 1rem;
     font-weight: 500;
     letter-spacing: 0.01em;
   }
 
-  /* Hover / tap (más sobrio) */
   ion-item:hover {
     --background: rgba(15, 23, 42, 0.9);
     transform: translateY(-1px);
@@ -85,15 +117,11 @@
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
   }
 
-  /* ===== Item ACTIVO =====
-     (routerLinkActive="menu-item-active") */
-
+  /* ===== Item ACTIVO ===== */
   ion-item.menu-item-active {
-    /* fondo discreto con un poco de profundidad */
     --background: linear-gradient(135deg, #111827, #020617);
     --color: #f9fafb;
 
-    /* “barra” de acento a la izquierda */
     border-left-width: 4px;
     border-left-style: solid;
     border-left-color: var(--ion-color-primary);

@@ -1,14 +1,13 @@
 <ion-app>
   <!-- MENÚ LATERAL IZQUIERDO -->
   <ion-menu side="start" menuId="codex-menu" contentId="main-content">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Códex del Nexo</ion-title>
+   <ion-header>
+      <ion-toolbar [ngClass]="headerTheme">
+          <ion-title>{{ headerTitle }}</ion-title>
       </ion-toolbar>
-    </ion-header>
-
+   </ion-header>
+   
     <ion-content class="ion-padding">
-      <!-- SECCIONES DEL MENÚ (Principal / Códex / Comunidad & Perfil) -->
       <ion-list *ngFor="let section of menu">
         <ion-list-header>
           {{ section.titulo }}
