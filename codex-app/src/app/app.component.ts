@@ -1,86 +1,49 @@
+// src/app/app.component.ts
 import { Component } from '@angular/core';
-
-interface MenuItem {
-  icono: string;
-  nombre: string;
-  ruta: string;
-}
-
-interface MenuSection {
-  titulo: string;
-  items: MenuItem[];
-}
+import { Platform } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: false,
+  standalone: false, 
 })
 export class AppComponent {
 
-  menu: MenuSection[] = [
-    {
-      titulo: 'Principal',
-      items: [
-        {
-          icono: 'home-outline',
-          nombre: 'Inicio',
-          ruta: '/inicio',
-        },
-      ],
-    },
-    {
-      titulo: 'Códex',
-      items: [
-        {
-          icono: 'book-outline',
-          nombre: 'Lore',
-          ruta: '/lore',
-        },
-        {
-          icono: 'body-outline',
-          nombre: 'Personajes',
-          ruta: '/personajes',
-        },
-        {
-          icono: 'skull-outline',
-          nombre: 'Enemigos',
-          ruta: '/enemigos',
-        },
-        {
-          icono: 'ribbon-outline',
-          nombre: 'Emblemas',
-          ruta: '/emblemas',
-        },
-        {
-          icono: 'planet-outline',
-          nombre: 'Dominios',
-          ruta: '/dominio',
-        },
-      ],
-    },
-    {
-      titulo: 'Comunidad',
-      items: [
-        {
-          icono: 'newspaper-outline',
-          nombre: 'Noticias',
-          ruta: '/noticias',
-        },
-        {
-          icono: 'people-outline',
-          nombre: 'Comunidad',
-          ruta: '/comunidad',
-        },
-        {
-          icono: 'person-circle-outline',
-          nombre: 'Perfil (login / registro)',
-          ruta: '/perfil',
-        },
-      ],
-    },
+  public appPages = [
+    { title: 'Inicio', url: '/inicio', icon: 'home-outline' },
+    { title: 'Lore', url: '/lore', icon: 'book-outline' },
+    { title: 'Personajes', url: '/personajes', icon: 'person-outline' },
+    { title: 'Enemigos', url: '/enemigos', icon: 'skull-outline' },
+    { title: 'Emblemas', url: '/emblemas', icon: 'ribbon-outline' },
+    { title: 'Dominios', url: '/dominio', icon: 'planet-outline' },
+    { title: 'Noticias', url: '/noticias', icon: 'newspaper-outline' },
+    { title: 'Comunidad', url: '/comunidad', icon: 'chatbubbles-outline' },
+    { title: 'Perfil (login / registro)', url: '/perfil', icon: 'person-circle-outline' },
   ];
 
-  constructor() {}
+  constructor(private platform: Platform) {
+    this.initializeApp();
+  }
+
+  private async initializeApp() {
+    await this.platform.ready();
+
+  
+    if (Capacitor.getPlatform() !== 'web') {
+      try {
+ 
+        await StatusBar.setOverlaysWebView({ overlay: false });
+
+      
+        await StatusBar.setBackgroundColor({ color: '#020617' });
+
+        await StatusBar.setStyle({ style: Style.Light });
+      } catch (err) {
+        console.log('Error configurando StatusBar', err);
+      }
+    }
+  }
 }

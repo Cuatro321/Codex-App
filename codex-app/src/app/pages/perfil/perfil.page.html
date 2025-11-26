@@ -7,22 +7,153 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true">
+<ion-content class="perfil-page" fullscreen="true">
   <div class="ion-padding">
-    <ng-container *ngIf="user$ | async as user; else authForm">
-      <div class="profile-card">
-        <div class="profile-avatar">
-          <ion-icon name="person-circle-outline"></ion-icon>
-        </div>
-        <h2>{{ user.email }}</h2>
-        <p class="muted">Conectado al Nexo</p>
 
-        <ion-button expand="block" color="danger" (click)="logout()">
-          Cerrar sesión
-        </ion-button>
+    <!-- SI HAY USUARIO: PERFIL + EDICIÓN -->
+    <ng-container *ngIf="user$ | async as user; else authForm">
+
+      <!-- Cabecera del perfil -->
+      <div class="profile-header">
+        <div class="profile-main">
+          <div class="profile-avatar">
+            <ng-container *ngIf="avatarPreviewUrl; else avatarDefault">
+              <img [src]="avatarPreviewUrl" alt="Avatar" />
+            </ng-container>
+            <ng-template #avatarDefault>
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ng-template>
+          </div>
+
+          <div>
+            <div class="profile-label">Cuenta del Nexo</div>
+            <div class="profile-name">
+              {{ displayName || user.email }}
+            </div>
+            <div class="profile-meta">
+              <ion-badge color="success">Conectado al Nexo</ion-badge>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Editor de perfil -->
+      <div class="profile-editor">
+
+        <!-- Columna izquierda: Perfil público -->
+        <div class="editor-card">
+          <h3 class="section-title">Perfil público</h3>
+
+          <div class="avatar-edit">
+            <div class="avatar-preview">
+              <ng-container *ngIf="avatarPreviewUrl; else avatarIcon">
+                <img [src]="avatarPreviewUrl" alt="Avatar" />
+              </ng-container>
+              <ng-template #avatarIcon>
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </ng-template>
+            </div>
+
+            <div class="avatar-actions">
+              <p class="hint">JPG/PNG, recomendado 512×512px.</p>
+
+              <input
+                #avatarInput
+                type="file"
+                accept="image/*"
+                hidden
+                (change)="onAvatarSelected($event)"
+              />
+
+              <ion-button size="small" (click)="avatarInput.click()">
+                Cambiar imagen
+              </ion-button>
+
+              <ion-item lines="none" class="remove-avatar">
+                <ion-checkbox slot="start" [(ngModel)]="removeAvatar"></ion-checkbox>
+                <ion-label>Quitar avatar</ion-label>
+              </ion-item>
+            </div>
+          </div>
+
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Nombre para mostrar</ion-label>
+            <ion-input [(ngModel)]="displayName"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Bio</ion-label>
+            <ion-textarea
+              autoGrow="true"
+              rows="3"
+              [(ngModel)]="bio"
+            ></ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Columna derecha: Información básica -->
+        <div class="editor-card">
+          <h3 class="section-title">Información básica</h3>
+
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Ciudad</ion-label>
+            <ion-input [(ngModel)]="city"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">País</ion-label>
+            <ion-input [(ngModel)]="country"></ion-input>
+          </ion-item>
+
+          <div class="buttons-row">
+            <ion-button
+              expand="block"
+              color="warning"
+              (click)="onSaveProfile(user)"
+              [disabled]="profileSaveLoading"
+            >
+              <ion-spinner
+                *ngIf="profileSaveLoading"
+                name="crescent"
+                slot="start"
+              ></ion-spinner>
+              Guardar cambios
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              fill="outline"
+              color="medium"
+              (click)="onResetProfile(user)"
+              [disabled]="profileSaveLoading"
+            >
+              Cancelar
+            </ion-button>
+          </div>
+
+          <div class="profile-messages">
+            <p class="profile-error" *ngIf="profileError">
+              {{ profileError }}
+            </p>
+            <p class="profile-ok" *ngIf="profileMessage">
+              {{ profileMessage }}
+            </p>
+          </div>
+
+          <div class="logout-wrapper">
+            <ion-button
+              expand="block"
+              color="danger"
+              (click)="logout()"
+            >
+              Cerrar sesión
+            </ion-button>
+          </div>
+        </div>
       </div>
     </ng-container>
 
+    <!-- SI NO HAY USUARIO: FORMULARIO LOGIN / REGISTRO -->
     <ng-template #authForm>
       <div class="auth-card">
         <ion-segment [(ngModel)]="mode" value="login">
@@ -54,11 +185,12 @@
           </ion-item>
         </ion-list>
 
-        <div *ngIf="errorMessage" class="error-msg">
+        <div *ngIf="errorMessage" class="error-text">
           {{ errorMessage }}
         </div>
 
         <ion-button
+          class="auth-btn"
           expand="block"
           color="warning"
           (click)="submit()"

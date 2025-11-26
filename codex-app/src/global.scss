@@ -86,3 +86,7 @@ ion-content::part(scroll) {
   margin-top: 0.5rem;
   border: 1px solid rgba(148, 163, 184, 0.2);
 }
+
+ion-content {
+  --padding-top: env(safe-area-inset-top);
+}
