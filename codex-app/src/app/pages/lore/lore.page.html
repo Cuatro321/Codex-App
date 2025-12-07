@@ -10,7 +10,7 @@
 <ion-content fullscreen="true">
   <div class="ion-padding">
     <!-- Intro -->
-    <div class="codex-card">
+    <div class="codex-card codex-card--intro">
       <h2 class="codex-title">Códex del Nexo</h2>
       <p class="codex-subtitle">
         Historias, personajes, enemigos, dominios, artefactos y guías
@@ -19,14 +19,22 @@
     </div>
 
     <!-- Últimas historias -->
-    <div class="codex-card" style="margin-top: 1.5rem">
+    <div class="codex-card codex-card--stories">
       <div class="codex-card-header">
         <h3>📖 Últimas historias</h3>
+        <p>Fragmentos recientes sincronizados desde el Códex.</p>
       </div>
 
-      <ng-container *ngIf="historias$ | async as historias; else loadingHistorias">
+      <ng-container
+        *ngIf="historias$ | async as historias; else loadingHistorias"
+      >
         <ion-list class="codex-list">
-          <ion-item *ngFor="let h of historias">
+          <ion-item
+            *ngFor="let h of historias"
+            class="codex-story-item"
+            detail="false"
+            (click)="openStoryDetail(h)"
+          >
             <ion-thumbnail slot="start" *ngIf="h.coverImageUrl">
               <img [src]="h.coverImageUrl" [alt]="h.title" />
             </ion-thumbnail>
@@ -40,28 +48,63 @@
       </ng-container>
 
       <ng-template #loadingHistorias>
-        <p style="margin-top: 0.5rem; opacity: 0.7">Cargando historias...</p>
-      </ng-template>
-    </div>
-
-    <!-- Dominios destacados -->
-    <div class="codex-card" style="margin-top: 1.5rem">
-      <div class="codex-card-header">
-        <h3>🏛️ Dominios</h3>
-      </div>
-
-      <div
-        class="domain-chips"
-        *ngIf="dominios$ | async as dominios; else loadingDominios"
-      >
-        <button class="domain-chip" *ngFor="let d of dominios">
-          {{ d.name }}
-        </button>
-      </div>
-
-      <ng-template #loadingDominios>
-        <p style="margin-top: 0.5rem; opacity: 0.7">Cargando dominios...</p>
+        <p class="codex-loading">Cargando historias...</p>
       </ng-template>
     </div>
   </div>
+
+  <!-- MODAL DETALLE HISTORIA -->
+  <ion-modal
+    [isOpen]="storyModalOpen"
+    (didDismiss)="closeStoryModal()"
+    class="story-modal"
+  >
+    <ng-template>
+      <ion-header translucent="true">
+        <ion-toolbar class="story-modal-toolbar">
+          <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="closeStoryModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="story-modal-title">
+            {{ selectedStory?.title || 'Historia' }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="story-modal-content" fullscreen="true">
+        <div class="story-modal-inner" *ngIf="selectedStory as story">
+          <!-- Hero -->
+          <div class="story-hero">
+            <ng-container *ngIf="story.coverImageUrl; else heroFallback">
+              <div class="story-cover">
+                <img [src]="story.coverImageUrl" [alt]="story.title" />
+              </div>
+            </ng-container>
+
+            <ng-template #heroFallback>
+              <div class="story-cover story-cover--fallback">
+                <ion-icon name="book-outline"></ion-icon>
+              </div>
+            </ng-template>
+
+            <div class="story-hero-text">
+              <h2>{{ story.title }}</h2>
+              <p class="story-summary">
+                {{ story.summary }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="story-body-card">
+            <p class="story-body">
+              {{ story.body }}
+            </p>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

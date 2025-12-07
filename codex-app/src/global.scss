@@ -90,3 +90,27 @@ ion-content::part(scroll) {
 ion-content {
   --padding-top: env(safe-area-inset-top);
 }
+/* ===== Alert "Eliminar amigo" estilo Nexo ===== */
+ion-alert.nexo-alert {
+  --background: rgba(15, 23, 42, 0.97);
+  --backdrop-opacity: 0.85;
+  --border-radius: 18px;
+  --box-shadow: 0 24px 60px rgba(15, 23, 42, 0.95);
+
+  --header-color: #e5e7eb;
+  --message-color: rgba(226, 232, 240, 0.92);
+
+  --button-color: #fbbf24;
+  --button-border-radius: 0;
+  --button-background: transparent;
+  --button-background-focused: rgba(15, 23, 42, 0.9);
+}
+
+ion-alert.nexo-alert .alert-button.alert-button-role-destructive {
+  color: #f97373;
+  font-weight: 600;
+}
+
+ion-alert.nexo-alert .alert-button:not(.alert-button-role-destructive) {
+  font-weight: 600;
+}

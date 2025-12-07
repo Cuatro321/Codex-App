@@ -1,4 +1,5 @@
 :root {
+  /* Colores principales del Nexo */
   --ion-color-primary: #fbbf24;
   --ion-color-primary-rgb: 251, 191, 36;
   --ion-color-primary-contrast: #020617;
@@ -13,13 +14,21 @@
   --ion-color-secondary-shade: #7e22ce;
   --ion-color-secondary-tint: #c4b5fd;
 
+  /* Fondo / texto generales */
   --ion-background-color: #020617;
   --ion-text-color: #e5e7eb;
 
+  /* Toolbar */
   --ion-toolbar-background: #020617;
   --ion-toolbar-color: #e5e7eb;
 
+  /* Vars personalizadas para las cards del Códex */
   --codex-card-bg: #020617;
   --codex-card-border: #1f2937;
   --codex-card-shadow: 0 18px 35px rgba(15, 23, 42, 0.9);
+
+  /* Extra: acentos de estado / presencia por si los necesitas en más sitios */
+  --nexo-online: #22c55e;
+  --nexo-offline: #6b7280;
+  --nexo-warning: #f97316;
 }

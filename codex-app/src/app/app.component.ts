@@ -28,8 +28,8 @@ interface MenuSection {
   standalone: false,
 })
 export class AppComponent {
-  // Título fijo para que no se corte
-  headerTitle = 'MENU NEXO';
+  // Título fijo para el header
+  headerTitle = 'MENU';
   // Clase que define el color del header
   headerTheme = 'header-codex';
 
@@ -54,7 +54,7 @@ export class AppComponent {
     {
       titulo: 'COMUNIDAD',
       items: [
-        { icono: 'newspaper-outline', nombre: 'Noticias', ruta: '/noticias' },
+      
         { icono: 'chatbubbles-outline', nombre: 'Comunidad', ruta: '/comunidad' },
         {
           icono: 'person-circle-outline',
@@ -90,8 +90,7 @@ export class AppComponent {
         console.log('Error configurando StatusBar', err);
       }
 
-      // Inicializar notificaciones push (FCM)
-      await this.push.init();
+      
     }
   }
 
@@ -119,7 +118,7 @@ export class AppComponent {
     ) {
       this.headerTheme = 'header-codex';
     } else if (
-      path.startsWith('/noticias') ||
+   
       path.startsWith('/comunidad')
     ) {
       this.headerTheme = 'header-comunidad';

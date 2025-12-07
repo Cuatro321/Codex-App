@@ -1,2 +1,166 @@
-:host {
+/* src/app/pages/comunidad/comunidad.page.scss */
+
+.comunidad-page {
+  --background: radial-gradient(circle at top, #020617 0, #000 55%);
+}
+
+.nexo-toolbar {
+  --background: #020617;
+  --color: #e5e7eb;
+}
+
+.nexo-subtoolbar {
+  --background: #020617;
+  --color: #e5e7eb;
+  border-bottom: 1px solid rgba(30, 64, 175, 0.6);
+}
+
+/* ===== SEGMENTO (Miembros / Amigos / Solicitudes) ===== */
+
+.nexo-segment {
+  --background: transparent;
+  width: 100%;
+}
+
+.nexo-segment ion-segment-button {
+  --background: transparent;
+  --background-checked: transparent;
+  --indicator-color: transparent;
+  --color: rgba(148, 163, 184, 0.9);
+  --color-checked: #fbbf24;
+  flex: 1;
+  min-width: 0;
+}
+
+/* quitamos cualquier indicador por defecto */
+.nexo-segment ion-segment-button::part(indicator) {
+  background: transparent;
+}
+
+/* línea dorada debajo del label activo */
+.segment-label {
+  position: relative;
+  padding-bottom: 4px;
+  font-size: 0.8rem;
+}
+
+ion-segment-button.ion-activated .segment-label {
+  font-weight: 600;
+}
+
+ion-segment-button.ion-activated .segment-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+}
+
+/* ===== Tarjeta descriptiva ===== */
+
+.codex-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  margin-bottom: 16px;
+}
+
+.codex-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.codex-subtitle {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.nexo-list {
+  background: transparent;
+}
+
+/* ===== Items de lista ===== */
+
+ion-item {
+  --background: rgba(15, 23, 42, 0.85);
+  --border-color: rgba(30, 64, 175, 0.4);
+  margin-bottom: 6px;
+  border-radius: 12px;
+}
+
+ion-label h2 {
+  color: #e5e7eb;
+}
+
+ion-label p {
+  color: rgba(209, 213, 219, 0.9);
+  font-size: 0.9rem;
+}
+
+ion-label p.muted {
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.8rem;
+}
+
+.status-badge {
+  margin-left: 6px;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+/* ===== Modal de perfil ===== */
+
+.profile-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.profile-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-main h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #fbbf24;
+}
+
+.profile-location {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.profile-section {
+  margin-top: 16px;
+}
+
+.profile-section h3 {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.profile-section p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.profile-section p strong {
+  color: #fbbf24;
+  margin-right: 4px;
 }

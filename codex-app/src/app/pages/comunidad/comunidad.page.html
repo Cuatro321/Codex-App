@@ -1,3 +1,4 @@
+<!-- src/app/pages/comunidad/comunidad.page.html -->
 <ion-header translucent="true">
   <ion-toolbar class="nexo-toolbar">
     <ion-buttons slot="start">
@@ -5,17 +6,288 @@
     </ion-buttons>
     <ion-title class="nexo-brand">Comunidad</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar class="nexo-subtoolbar">
+    <!-- Añadimos class="nexo-segment" y class="segment-label" en los labels -->
+    <ion-segment
+      class="nexo-segment"
+      [value]="segment"
+      (ionChange)="segmentChanged($event)"
+    >
+      <ion-segment-button value="members">
+        <ion-label class="segment-label">Miembros</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="friends">
+        <ion-label class="segment-label">Amigos</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="requests">
+        <ion-label class="segment-label">Solicitudes</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true">
+<ion-content class="comunidad-page" fullscreen="true">
   <div class="ion-padding">
-    <div class="codex-card">
-      <h2 class="codex-title">Comunidad del Nexo</h2>
-      <p class="codex-subtitle">
-        Aquí podrás integrar foros, enlaces a Discord, ranking de jugadores,
-        etc. De momento es un placeholder limpio listo para conectar con tu
-        sitio Django.
-      </p>
-    </div>
+    <!-- PANEL: MIEMBROS -->
+    <ng-container *ngIf="segment === 'members'">
+      <div class="codex-card">
+        <h2 class="codex-title">Miembros del Nexo</h2>
+        <p class="codex-subtitle">
+          Explora a todos los jugadores del Nexo. Toca un perfil para ver sus
+          detalles o enviar una solicitud de amistad.
+        </p>
+      </div>
+
+      <ion-list class="nexo-list">
+        <ion-item
+          *ngFor="let m of members"
+          detail="false"
+          (click)="openProfile(m, $event)"
+        >
+          <ion-avatar slot="start">
+            <img [src]="m.avatarUrl || 'assets/img/avatar-default.png'" />
+          </ion-avatar>
+
+          <ion-label>
+            <h2>{{ m.displayName || m.username || 'Jugador sin nombre' }}</h2>
+            <p *ngIf="m.bio">{{ m.bio }}</p>
+            <p class="muted">
+              Ciudad: {{ m.city || 'Desconocida' }} · País:
+              {{ m.country || 'Desconocido' }}
+            </p>
+          </ion-label>
+
+          <!-- Botón solo si hay sesión -->
+          <ion-button
+            *ngIf="currentUid"
+            slot="end"
+            size="small"
+            fill="outline"
+            color="primary"
+            [disabled]="!canSendRequest(m) || sendingRequestTo[m.uid]"
+            (click)="sendRequest(m, $event)"
+          >
+            Solicitar amistad
+          </ion-button>
+        </ion-item>
+
+        <ion-item *ngIf="members.length === 0">
+          <ion-label>No hay miembros disponibles.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+
+    <!-- PANEL: AMIGOS -->
+    <ng-container *ngIf="segment === 'friends'">
+      <div class="codex-card">
+        <h2 class="codex-title">Amigos del Nexo</h2>
+        <p class="codex-subtitle">
+          Tus aliados dentro del Nexo. Chatea con ellos o gestiona tu lista de
+          amigos.
+        </p>
+      </div>
+
+      <ion-list class="nexo-list">
+        <ion-item *ngFor="let f of friends">
+          <ng-container *ngIf="getOtherProfile(f) as p">
+            <ion-avatar slot="start" (click)="openProfile(p, $event)">
+              <img [src]="p.avatarUrl || 'assets/img/avatar-default.png'" />
+            </ion-avatar>
+
+            <ion-label (click)="openProfile(p, $event)">
+              <h2>
+                {{ p.displayName || p.username || 'Jugador' }}
+                <ion-badge
+                  class="status-badge"
+                  [color]="isOnline(p) ? 'success' : 'medium'"
+                >
+                  {{ isOnline(p) ? 'En línea' : 'Desconectado' }}
+                </ion-badge>
+              </h2>
+              <p *ngIf="p.bio">{{ p.bio }}</p>
+              <p class="muted">
+                Ciudad: {{ p.city || 'Desconocida' }} · País:
+                {{ p.country || 'Desconocido' }}
+              </p>
+            </ion-label>
+
+            <ion-buttons slot="end">
+              <ion-button
+                fill="clear"
+                (click)="openProfile(p, $event)"
+                aria-label="Ver perfil"
+              >
+                <ion-icon
+                  slot="icon-only"
+                  name="person-circle-outline"
+                ></ion-icon>
+              </ion-button>
+
+              <ion-button
+                fill="solid"
+                color="warning"
+                (click)="openChatWithProfile(p, $event)"
+                aria-label="Chat privado"
+              >
+                <ion-icon
+                  slot="icon-only"
+                  name="chatbubbles-outline"
+                ></ion-icon>
+              </ion-button>
+
+              <ion-button
+                fill="clear"
+                color="danger"
+                (click)="confirmRemoveFriend(f, $event)"
+                aria-label="Eliminar amigo"
+              >
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ng-container>
+        </ion-item>
+
+        <ion-item *ngIf="friends.length === 0">
+          <ion-label>
+            Aún no tienes amigos en el Nexo. Envía algunas solicitudes desde la
+            pestaña Miembros.
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+
+    <!-- PANEL: SOLICITUDES -->
+    <ng-container *ngIf="segment === 'requests'">
+      <div class="codex-card">
+        <h2 class="codex-title">Solicitudes del Nexo</h2>
+        <p class="codex-subtitle">
+          Aquí llegan las solicitudes de amistad que recibes y las que envías.
+        </p>
+      </div>
+
+      <ion-list class="nexo-list">
+        <ion-list-header>
+          <ion-label>Solicitudes recibidas</ion-label>
+        </ion-list-header>
+
+        <ion-item *ngFor="let r of incomingRequests">
+          <ng-container *ngIf="getProfileByUid(r.fromUid) as p">
+            <ion-avatar slot="start" (click)="openProfile(p, $event)">
+              <img [src]="p.avatarUrl || 'assets/img/avatar-default.png'" />
+            </ion-avatar>
+            <ion-label (click)="openProfile(p, $event)">
+              <h2>{{ p.displayName || p.username || 'Jugador' }}</h2>
+              <p>Quiere ser tu amigo.</p>
+            </ion-label>
+          </ng-container>
+
+          <ion-buttons slot="end">
+            <ion-button fill="clear" color="medium" (click)="rejectRequest(r)">
+              Rechazar
+            </ion-button>
+            <ion-button fill="solid" color="primary" (click)="acceptRequest(r)">
+              Aceptar
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+
+        <ion-item *ngIf="incomingRequests.length === 0">
+          <ion-label>No tienes solicitudes recibidas.</ion-label>
+        </ion-item>
+
+        <ion-list-header class="mt-4">
+          <ion-label>Solicitudes enviadas</ion-label>
+        </ion-list-header>
+
+        <ion-item *ngFor="let r of outgoingRequests">
+          <ng-container *ngIf="getProfileByUid(r.toUid) as p">
+            <ion-avatar slot="start" (click)="openProfile(p, $event)">
+              <img [src]="p.avatarUrl || 'assets/img/avatar-default.png'" />
+            </ion-avatar>
+            <ion-label (click)="openProfile(p, $event)">
+              <h2>{{ p.displayName || p.username || 'Jugador' }}</h2>
+              <p>Solicitud pendiente de respuesta.</p>
+            </ion-label>
+          </ng-container>
+        </ion-item>
+
+        <ion-item *ngIf="outgoingRequests.length === 0">
+          <ion-label>No has enviado solicitudes recientemente.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
   </div>
+
+  <!-- MODAL DETALLE DE PERFIL (se mantiene igual) -->
+  <ion-modal
+    [isOpen]="isProfileModalOpen"
+    (didDismiss)="closeProfileModal()"
+  >
+    <ng-template>
+      <ion-header translucent="true">
+        <ion-toolbar class="nexo-toolbar">
+          <ion-buttons slot="start">
+            <ion-button (click)="closeProfileModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>
+            {{
+              selectedProfile?.displayName ||
+                selectedProfile?.username ||
+                'Perfil'
+            }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content *ngIf="selectedProfile as p" class="comunidad-page">
+        <div class="ion-padding">
+          <div class="profile-card">
+            <div class="profile-header">
+              <ion-avatar>
+                <img [src]="p.avatarUrl || 'assets/img/avatar-default.png'" />
+              </ion-avatar>
+              <div class="profile-main">
+                <h2>{{ p.displayName || p.username || 'Jugador' }}</h2>
+                <p class="profile-location">
+                  {{ p.city || 'Ciudad desconocida' }} ·
+                  {{ p.country || 'País desconocido' }}
+                </p>
+                <ion-badge
+                  [color]="isOnline(p) ? 'success' : 'medium'"
+                  class="status-badge"
+                >
+                  {{ isOnline(p) ? 'En línea' : 'Desconectado' }}
+                </ion-badge>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h3>Información</h3>
+              <p>
+                <strong>Nombre:</strong>
+                {{ p.displayName || p.username || 'Jugador' }}
+              </p>
+              <p>
+                <strong>Bio:</strong>
+                {{ p.bio || 'Sin descripción' }}
+              </p>
+              <p>
+                <strong>Ciudad:</strong>
+                {{ p.city || 'Desconocida' }}
+              </p>
+              <p>
+                <strong>País:</strong>
+                {{ p.country || 'Desconocido' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

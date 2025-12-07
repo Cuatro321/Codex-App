@@ -1,95 +1,40 @@
-// src/app/services/push-notifications.service.ts
 import { Injectable } from '@angular/core';
-import {
-  PushNotifications,
-  Token,
-  PushNotificationSchema,
-  ActionPerformed,
-} from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
-
-import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
-import {
-  getFirestore,
-  Firestore,
-  collection,
-  doc,
-  setDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
-
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PushNotificationsService {
-  private app: FirebaseApp;
-  private db: Firestore;
+  private initialized = false;
 
-  constructor() {
-    if (!getApps().length) {
-      this.app = initializeApp(environment.firebase);
-    } else {
-      this.app = getApp();
-    }
-    this.db = getFirestore(this.app);
-  }
+  constructor() {}
 
-  async init() {
-    if (Capacitor.getPlatform() === 'web') {
-      // En navegador no vamos a usar notificaciones push nativas
+  /**
+   * Inicialización de notificaciones push.
+   *
+   * IMPORTANTE:
+   * De momento está DESACTIVADA en Android porque Firebase nativo
+   * (google-services.json) no está configurado y provoca que la app
+   * se cierre al arrancar.
+   */
+  async initPush() {
+    // Si no es plataforma nativa (ej. navegador) no hacemos nada
+    if (!Capacitor.isNativePlatform()) {
+      console.log('[Push] Web/PWA: push nativo deshabilitado.');
       return;
     }
 
-    // 1) Permisos
-    let permStatus = await PushNotifications.checkPermissions();
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
-    }
-
-    if (permStatus.receive !== 'granted') {
-      console.log('Permiso de notificaciones NO concedido');
-      return;
-    }
-
-    // 2) Registrar con FCM / APNS
-    await PushNotifications.register();
-
-    // 3) Escuchar token
-    PushNotifications.addListener('registration', async (token: Token) => {
-      console.log('Token push:', token.value);
-
-      // Guardamos el token en Firestore (colección deviceTokens)
-      const ref = doc(collection(this.db, 'deviceTokens'), token.value);
-      await setDoc(
-        ref,
-        {
-          token: token.value,
-          platform: Capacitor.getPlatform(),
-          createdAt: serverTimestamp(),
-        },
-        { merge: true },
-      );
-    });
-
-    PushNotifications.addListener('registrationError', (err) => {
-      console.error('Error registrando push', err);
-    });
-
-    // 4) Recibir notificaciones mientras la app está abierta (log opcional)
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotificationSchema) => {
-        console.log('Notificación recibida en foreground', notification);
-      },
+    // Temporalmente deshabilitado para evitar el crash por Firebase
+    console.log(
+      '[Push] Init ignorado: Firebase nativo no está configurado. ' +
+        'Se desactiva PushNotifications.register() para evitar cierres de la app.'
     );
 
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (action: ActionPerformed) => {
-        console.log('Acción en notificación', action);
-      },
-    );
+    // Cuando configures Firebase para Android (google-services.json, etc.),
+    // podrás quitar este return y poner aquí la lógica real de:
+    //  - pedir permisos
+    //  - registrar el dispositivo
+    //  - manejar listeners de notificaciones
+    return;
   }
 }

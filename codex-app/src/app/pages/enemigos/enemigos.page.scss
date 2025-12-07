@@ -1,3 +1,76 @@
+:host {
+  display: block;
+
+  ion-content {
+    --background: radial-gradient(circle at top, #020617 0, #000 55%);
+    --padding-bottom: 80px;
+  }
+
+  ion-content::part(scroll),
+  ion-content .inner-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===== Toolbar ===== */
+
+.nexo-toolbar {
+  --background: linear-gradient(to bottom, #020617, #020617ee);
+  --color: #e5e7eb;
+}
+
+.nexo-brand {
+  font-weight: 600;
+}
+
+/* ===== Tarjeta cabecera Códex ===== */
+
+.codex-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.98);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+  overflow: hidden;
+}
+
+.codex-card::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(550px 280px at 10% 0%, rgba(248, 113, 113, 0.22), transparent 60%),
+    radial-gradient(420px 220px at 90% 0%, rgba(59, 130, 246, 0.14), transparent 60%);
+  opacity: 0.8;
+  z-index: -1;
+}
+
+.codex-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.codex-subtitle {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* ===== Lista de enemigos (tarjetas) ===== */
+
+@keyframes enemyCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .grid-cards {
   margin-top: 1rem;
   display: grid;
@@ -7,36 +80,287 @@
 .enemy-card {
   background: radial-gradient(circle at top, #111827 0%, #020617 60%);
   border-radius: 1.3rem;
-  padding: 1rem 1.1rem;
+  padding: 0.85rem 0.95rem;
   border: 1px solid rgba(248, 113, 113, 0.4);
+  cursor: pointer;
+  animation: enemyCardEnter 0.25s ease-out both;
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
 }
 
-.enemy-card h3 {
-  font-size: 1rem;
+.enemy-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.95);
+}
+
+.enemy-card:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* mismo tamaño de recuadro */
+.enemy-main {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  min-height: 88px; /* asegura altura mínima igual para todos */
+}
+
+.enemy-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enemy-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.enemy-info {
+  flex: 1;
+}
+
+.enemy-info h3 {
+  font-size: 0.95rem;
   font-weight: 600;
+  margin-bottom: 0.1rem;
 }
 
 .enemy-meta {
   font-size: 0.75rem;
   opacity: 0.8;
-  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 
+/* descripción recortada para que todas las cards se vean iguales */
 .enemy-text {
   font-size: 0.85rem;
-  margin-top: 0.6rem;
   opacity: 0.9;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-:host {
-  display: block;
 
-  ion-content {
-    --padding-bottom: 80px;
+.enemy-loading {
+  margin-top: 1rem;
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+/* ===== Modal enemigo ===== */
+
+.enemy-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.9;
+  --backdrop-bg: rgba(0, 0, 0, 0.95);
+  --box-shadow: none;
+  --border-radius: 0;
+  --width: 100%;
+  --height: 100%;
+
+  @media (min-width: 768px) {
+    --width: 430px;
+    --height: 92%;
+    --border-radius: 22px;
   }
+}
 
-  ion-content::part(scroll),
-  ion-content .inner-scroll {
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+.enemy-modal-toolbar {
+  --background: transparent;
+  --color: #e5e7eb;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.34);
+}
+
+.enemy-modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.enemy-modal-content {
+  --background: radial-gradient(circle at top, #020617 0, #000 60%);
+}
+
+.enemy-modal-inner {
+  padding: 1rem;
+}
+
+/* HERO DEL MODAL */
+
+@keyframes enemyGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.8);
+  }
+  60% {
+    box-shadow: 0 0 0 14px rgba(248, 113, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+  }
+}
+
+.enemy-hero {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.enemy-portrait {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(248, 113, 113, 0.85);
+  background: radial-gradient(circle at top, #020617, #000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: enemyGlow 2.5s infinite;
+}
+
+.enemy-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.enemy-portrait ion-icon {
+  font-size: 3rem;
+  color: #f87171;
+}
+
+.enemy-hero-text h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.enemy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.enemy-tag {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #e5e7eb;
+}
+
+.enemy-tag--domain {
+  border-color: rgba(248, 113, 113, 0.9);
+  background: rgba(127, 29, 29, 0.45);
+}
+
+.enemy-tag--slug {
+  border-color: rgba(96, 165, 250, 0.9);
+  background: rgba(30, 64, 175, 0.25);
+}
+
+/* Secciones del modal */
+
+.enemy-section-card {
+  margin-top: 0.4rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(55, 65, 81, 0.95);
+  padding: 0.6rem 0.75rem 0.75rem;
+  background: radial-gradient(circle at top, #020617, #020617f0 55%, #020617f0);
+}
+
+.enemy-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #fca5a5;
+  margin-bottom: 0.35rem;
+}
+
+.enemy-section-header ion-icon {
+  font-size: 1rem;
+}
+
+.enemy-section-text {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #e5e7eb;
+  white-space: pre-line;
+}
+
+.enemy-desc-card .enemy-section-header {
+  color: #fecaca;
+}
+
+/* GIF card */
+
+.enemy-gif-card {
+  margin-top: 0.5rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(127, 29, 29, 0.9);
+  padding: 0.6rem 0.75rem 0.75rem;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(15, 23, 42, 0.96)
+  );
+}
+
+.enemy-gif-frame {
+  margin-top: 0.3rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background: #020617;
+  border: 1px solid rgba(248, 113, 113, 0.8);
+}
+
+.enemy-gif-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Imagen full */
+
+.enemy-image-card {
+  margin-top: 0.5rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(55, 65, 81, 0.95);
+  padding: 0.6rem 0.75rem 0.75rem;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(15, 23, 42, 0.96)
+  );
+}
+
+.enemy-image-frame {
+  margin-top: 0.3rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background: #020617;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+}
+
+.enemy-image-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .enemy-modal-inner {
+    padding-inline: 1.1rem;
+    padding-top: 1.1rem;
+    padding-bottom: 1.2rem;
   }
 }

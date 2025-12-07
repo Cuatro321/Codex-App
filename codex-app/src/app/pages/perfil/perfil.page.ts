@@ -1,3 +1,4 @@
+// src/app/pages/perfil/perfil.page.ts
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
@@ -32,7 +33,7 @@ export class PerfilPage implements OnInit {
   city = '';
   country = '';
 
-  // Avatar: guardamos solo un string (puede ser URL normal o data URL base64)
+  // Avatar: sólo string (URL normal o data URL base64)
   avatarPreviewUrl: string | null = null;
   removeAvatar = false;
 
@@ -44,7 +45,6 @@ export class PerfilPage implements OnInit {
   }
 
   ngOnInit(): void {
-    // Cada vez que cambia el usuario, cargamos (o limpiamos) el perfil
     this.user$.subscribe((user: firebase.User | null) => {
       if (user) {
         this.loadProfile(user.uid);
@@ -97,21 +97,14 @@ export class PerfilPage implements OnInit {
   }
 
   async onSaveProfile(user: firebase.User | null): Promise<void> {
-    if (!user) {
-      return;
-    }
+    if (!user) return;
 
     this.profileSaveLoading = true;
     this.profileError = '';
     this.profileMessage = '';
 
     try {
-      // avatarPreviewUrl puede ser:
-      // - null  → sin avatar
-      // - string "data:image/png;base64,..." → imagen seleccionada
-      // - o una URL normal si en el futuro decides usar CDN
       let avatarUrl = this.avatarPreviewUrl || '';
-
       if (this.removeAvatar) {
         avatarUrl = '';
       }
@@ -147,17 +140,13 @@ export class PerfilPage implements OnInit {
     }
   }
 
-  // Seleccionar avatar desde archivo local y convertirlo a data URL (base64)
   onAvatarSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
+    if (!input.files || input.files.length === 0) return;
 
     const file = input.files[0];
 
-    // Pequeña protección: no guardar imágenes enormes en Firestore
-    const maxSize = 200 * 1024; // 200 KB aprox
+    const maxSize = 200 * 1024; // 200KB aprox
     if (file.size > maxSize) {
       this.profileError =
         'La imagen es demasiado grande (máx. 200 KB). Elige una más pequeña.';
@@ -166,7 +155,6 @@ export class PerfilPage implements OnInit {
 
     const reader = new FileReader();
     reader.onload = () => {
-      // reader.result es "data:image/xxx;base64,AAAA..."
       this.avatarPreviewUrl = reader.result as string;
       this.removeAvatar = false;
       this.profileError = '';
@@ -174,7 +162,7 @@ export class PerfilPage implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  // ====== AUTH (igual que antes) ======
+  // ====== AUTH ======
 
   toggleMode(mode: 'login' | 'register'): void {
     this.mode = mode;
@@ -203,7 +191,15 @@ export class PerfilPage implements OnInit {
     });
   }
 
+  // ahora sí se usa desde el botón
   logout(): void {
-    this.auth.logout().subscribe();
+    this.auth.logout().subscribe({
+      next: () => {
+        this.clearProfileForm();
+      },
+      error: (err) => {
+        console.error('Error al cerrar sesión', err);
+      },
+    });
   }
 }

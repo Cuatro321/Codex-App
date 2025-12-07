@@ -16,13 +16,23 @@
 
     <div class="grid-cards" style="margin-top: 1rem;">
       <ng-container *ngIf="personajes$ | async as personajes; else loading">
-        <div class="char-card" *ngFor="let p of personajes">
+        <div
+          class="char-card"
+          *ngFor="let p of personajes"
+          (click)="openCharacterDetail(p)"
+        >
           <div class="char-header">
-            <img *ngIf="p.imageUrl" [src]="p.imageUrl" class="char-avatar" [alt]="p.name" />
+            <img
+              *ngIf="p.imageUrl"
+              [src]="p.imageUrl"
+              class="char-avatar"
+              [alt]="p.name"
+            />
             <div>
               <h3>{{ p.name }}</h3>
               <p class="char-meta">
-                {{ p.role || 'Rol desconocido' }} · {{ p.domainId || 'Dominio desconocido' }}
+                {{ p.role || 'Rol desconocido' }} ·
+                {{ p.domainId || 'Dominio desconocido' }}
               </p>
             </div>
           </div>
@@ -37,4 +47,81 @@
       </ng-template>
     </div>
   </div>
+
+  <!-- MODAL DETALLE PERSONAJE -->
+  <ion-modal
+    [isOpen]="charModalOpen"
+    (didDismiss)="closeCharModal()"
+    class="char-modal"
+  >
+    <ng-template>
+      <ion-header translucent="true">
+        <ion-toolbar class="char-modal-toolbar">
+          <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="closeCharModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="char-modal-title">
+            {{ selectedCharacter?.name || 'Personaje' }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="char-modal-content" fullscreen="true">
+        <div class="char-modal-inner" *ngIf="selectedCharacter as ch">
+          <!-- Hero -->
+          <div class="char-hero">
+            <div class="char-portrait">
+              <ng-container *ngIf="ch.imageUrl; else portraitFallback">
+                <img [src]="ch.imageUrl" [alt]="ch.name" />
+              </ng-container>
+              <ng-template #portraitFallback>
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </ng-template>
+            </div>
+
+            <div class="char-hero-text">
+              <h2>{{ ch.name }}</h2>
+
+              <div class="char-tags">
+                <span class="char-tag">
+                  {{ ch.role || 'Rol desconocido' }}
+                </span>
+                <span class="char-tag char-tag--domain">
+                  {{ ch.domainId || 'Dominio desconocido' }}
+                </span>
+                <span
+                  *ngIf="ch.playable !== undefined"
+                  class="char-tag char-tag--playable"
+                  [class.char-tag--playable-yes]="ch.playable"
+                >
+                  {{ ch.playable ? 'Jugable' : 'No jugable' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gif / animación -->
+          <div *ngIf="ch.gifUrl" class="char-gif-card">
+            <div class="char-gif-header">
+              <ion-icon name="sparkles-outline"></ion-icon>
+              <span>Animación</span>
+            </div>
+            <div class="char-gif-frame">
+              <img [src]="ch.gifUrl" [alt]="ch.name + ' animación'" />
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="char-desc-card">
+            <h3>Descripción</h3>
+            <p class="char-desc-text">
+              {{ ch.description || 'Sin descripción disponible.' }}
+            </p>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

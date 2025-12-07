@@ -1,3 +1,160 @@
+:host {
+  display: block;
+
+  ion-content {
+    --background: radial-gradient(circle at top, #020617 0, #000 55%);
+    --padding-bottom: 80px;
+  }
+
+  ion-content::part(scroll),
+  ion-content .inner-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ==== Toolbar / título ==== */
+
+.nexo-toolbar {
+  --background: linear-gradient(to bottom, #020617, #020617ee);
+  --color: #e5e7eb;
+}
+
+.nexo-brand {
+  font-weight: 600;
+}
+
+/* ==== Tarjetas Códex ==== */
+
+.codex-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(3, 7, 18, 0.95));
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(30, 64, 175, 0.7);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+  overflow: hidden;
+}
+
+/* Intro con glow morado/ámbar */
+
+.codex-card--intro::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(600px 300px at 15% 0%, rgba(123, 97, 255, 0.26), transparent 60%),
+    radial-gradient(400px 200px at 85% 0%, rgba(251, 191, 36, 0.22), transparent 60%);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+.codex-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.codex-subtitle {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Card de historias */
+
+.codex-card--stories {
+  margin-top: 1.5rem;
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.codex-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.codex-card-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.codex-card-header p {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* Lista historias */
+
+.codex-list {
+  margin-top: 0.5rem;
+}
+
+/* Animación ligera de aparición */
+
+@keyframes codexItemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.codex-story-item {
+  --background: transparent;
+  --border-color: rgba(30, 64, 175, 0.4);
+  --inner-padding-top: 0.5rem;
+  --inner-padding-bottom: 0.5rem;
+  animation: codexItemEnter 0.18s ease-out both;
+}
+
+.codex-story-item ion-thumbnail {
+  --border-radius: 0.75rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-right: 0.4rem;
+}
+
+.codex-story-item h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.codex-story-item p {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.codex-story-item::part(native) {
+  transition:
+    background 0.15s ease-out,
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+  border-radius: 0.75rem;
+}
+
+.codex-story-item:hover::part(native) {
+  background: rgba(30, 64, 175, 0.12);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.9);
+}
+
+.codex-story-item:active::part(native),
+.codex-story-item.ion-focused::part(native) {
+  background: rgba(30, 64, 175, 0.18);
+  transform: translateY(1px);
+}
+
+.codex-loading {
+  margin-top: 0.5rem;
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+/* ==== Secciones genéricas (por si las usas en otro lado) ==== */
+
 .section-card {
   margin-top: 1rem;
 }
@@ -18,16 +175,128 @@
     font-weight: 700;
   }
 }
-:host {
-  display: block;
 
-  ion-content {
-    --padding-bottom: 80px;
+/* ==== Modal historia ==== */
+
+.story-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.9;
+  --backdrop-bg: rgba(0, 0, 0, 0.95);
+  --box-shadow: none;
+  --border-radius: 0;
+  --width: 100%;
+  --height: 100%;
+
+  @media (min-width: 768px) {
+    --width: 420px;
+    --height: 90%;
+    --border-radius: 20px;
   }
+}
 
-  ion-content::part(scroll),
-  ion-content .inner-scroll {
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+.story-modal-toolbar {
+  --background: transparent;
+  --color: #e5e7eb;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.34);
+}
+
+.story-modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.story-modal-content {
+  --background: radial-gradient(circle at top, #020617 0, #000 60%);
+}
+
+.story-modal-inner {
+  padding: 1rem;
+}
+
+/* Hero */
+
+.story-hero {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.story-cover {
+  width: 72px;
+  height: 72px;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  border: 2px solid rgba(251, 191, 36, 0.7);
+  flex-shrink: 0;
+  background: radial-gradient(circle at top, #020617, #000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-cover--fallback ion-icon {
+  font-size: 2.3rem;
+  color: #fbbf24;
+}
+
+.story-hero-text h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.story-summary {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* Body */
+
+.story-body-card {
+  position: relative;
+  margin-top: 0.4rem;
+  padding: 0.9rem 0.85rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(15, 23, 42, 0.96)
+  );
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 18px 30px rgba(15, 23, 42, 0.9);
+}
+
+.story-body-card::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(500px 220px at 10% 0%, rgba(251, 191, 36, 0.16), transparent 60%),
+    radial-gradient(380px 200px at 90% 0%, rgba(168, 85, 247, 0.18), transparent 60%);
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.story-body {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #e5e7eb;
+  white-space: pre-line; /* respeta saltos de línea del body */
+}
+
+@media (min-width: 768px) {
+  .story-modal-inner {
+    padding-inline: 1.1rem;
+    padding-top: 1.1rem;
+    padding-bottom: 1.2rem;
   }
 }

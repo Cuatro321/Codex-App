@@ -9,6 +9,7 @@
 
 <ion-content fullscreen="true">
   <div class="ion-padding">
+    <!-- Cabecera -->
     <div class="codex-card">
       <h2 class="codex-title">Emblemas del Nexo</h2>
       <p class="codex-subtitle">
@@ -16,28 +17,115 @@
       </p>
     </div>
 
-    <ion-list class="codex-list" style="margin-top: 1rem;">
+    <!-- Lista de emblemas -->
+    <div class="emblem-grid">
       <ng-container *ngIf="emblemas$ | async as emblemas; else loading">
-        <ion-item *ngFor="let em of emblemas">
-          <ion-avatar slot="start" *ngIf="em.imageUrl || em.gifUrl">
-            <img [src]="em.gifUrl || em.imageUrl" [alt]="em.name" />
-          </ion-avatar>
+        <div
+          class="emblem-card"
+          *ngFor="let em of emblemas"
+          (click)="openEmblemDetail(em)"
+        >
+          <div class="emblem-main">
+            <div class="emblem-icon" *ngIf="em.imageUrl || em.gifUrl">
+              <img [src]="em.gifUrl || em.imageUrl" [alt]="em.name" />
+            </div>
 
-          <ion-label>
-            <h2>{{ em.name }}</h2>
-            <p>
-              {{ em.quote || em.usage || em.description }}
-            </p>
-            <p style="font-size: 0.7rem; opacity: 0.7;">
-              Rareza: {{ em.rarity || 'desconocida' }}
-            </p>
-          </ion-label>
-        </ion-item>
+            <div class="emblem-info">
+              <h3>{{ em.name }}</h3>
+
+              <p class="emblem-quote">
+                {{ em.quote || em.usage || em.description }}
+              </p>
+
+              <p class="emblem-meta">
+                Rareza: {{ em.rarity || 'desconocida' }}
+              </p>
+            </div>
+          </div>
+        </div>
       </ng-container>
 
       <ng-template #loading>
-        <p style="margin-top: 1rem; opacity: 0.7;">Cargando emblemas…</p>
+        <p class="emblem-loading">Cargando emblemas…</p>
       </ng-template>
-    </ion-list>
+    </div>
   </div>
+
+  <!-- MODAL DETALLE EMBLEMA -->
+  <ion-modal
+    [isOpen]="emblemModalOpen"
+    (didDismiss)="closeEmblemModal()"
+    class="emblem-modal"
+  >
+    <ng-template>
+      <ion-header translucent="true">
+        <ion-toolbar class="emblem-modal-toolbar">
+          <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="closeEmblemModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="emblem-modal-title">
+            {{ selectedEmblem?.name || 'Emblema' }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="emblem-modal-content" fullscreen="true">
+        <div class="emblem-modal-inner" *ngIf="selectedEmblem as em">
+          <!-- HERO -->
+          <div class="emblem-hero">
+            <div class="emblem-portrait">
+              <ng-container *ngIf="em.gifUrl || em.imageUrl; else emblemFallback">
+                <img [src]="em.gifUrl || em.imageUrl" [alt]="em.name" />
+              </ng-container>
+              <ng-template #emblemFallback>
+                <ion-icon name="shield-half-outline"></ion-icon>
+              </ng-template>
+            </div>
+
+            <div class="emblem-hero-text">
+              <h2>{{ em.name }}</h2>
+              <div class="emblem-tags">
+                <span class="emblem-tag emblem-tag--rarity">
+                  {{ em.rarity || 'Rareza desconocida' }}
+                </span>
+                <span
+                  *ngIf="em.domainId"
+                  class="emblem-tag emblem-tag--domain"
+                >
+                  {{ em.domainId }}
+                </span>
+                <span *ngIf="em.epoch" class="emblem-tag emblem-tag--epoch">
+                  {{ em.epoch }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- USO -->
+          <div class="emblem-section-card" *ngIf="em.usage || em.quote">
+            <div class="emblem-section-header">
+              <ion-icon name="flame-outline"></ion-icon>
+              <span>Uso en el Nexo</span>
+            </div>
+            <p class="emblem-section-text">
+              {{ em.usage || em.quote }}
+            </p>
+          </div>
+
+          <!-- DESCRIPCIÓN -->
+          <div class="emblem-section-card emblem-desc-card">
+            <div class="emblem-section-header">
+              <ion-icon name="book-outline"></ion-icon>
+              <span>Descripción</span>
+            </div>
+            <p class="emblem-section-text">
+              {{ em.description || 'Sin descripción disponible.' }}
+            </p>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

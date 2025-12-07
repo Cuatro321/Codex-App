@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CodexService, Emblem } from '../../services/codex.service';
-import firebase from 'firebase/compat/app';
 
 @Component({
   standalone: false,
@@ -12,9 +11,23 @@ import firebase from 'firebase/compat/app';
 export class EmblemasPage implements OnInit {
   emblemas$!: Observable<Emblem[]>;
 
+  // Estado del modal
+  selectedEmblem: Emblem | null = null;
+  emblemModalOpen = false;
+
   constructor(private codex: CodexService) {}
 
   ngOnInit() {
     this.emblemas$ = this.codex.getEmblems();
+  }
+
+  openEmblemDetail(emblem: Emblem) {
+    this.selectedEmblem = emblem;
+    this.emblemModalOpen = true;
+  }
+
+  closeEmblemModal() {
+    this.emblemModalOpen = false;
+    this.selectedEmblem = null;
   }
 }

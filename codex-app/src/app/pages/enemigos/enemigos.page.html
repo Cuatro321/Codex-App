@@ -9,6 +9,7 @@
 
 <ion-content fullscreen="true">
   <div class="ion-padding">
+    <!-- Cabecera -->
     <div class="codex-card">
       <h2 class="codex-title">Amenazas del Nexo</h2>
       <p class="codex-subtitle">
@@ -16,32 +17,136 @@
       </p>
     </div>
 
-    <ion-list class="codex-list" style="margin-top: 1rem">
+    <!-- Lista de enemigos (tarjetas de mismo tamaño) -->
+    <div class="grid-cards">
       <ng-container *ngIf="enemigos$ | async as enemigos; else loading">
-        <ion-item *ngFor="let e of enemigos">
-          <ion-avatar
-            slot="start"
-            *ngIf="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl"
-          >
-            <img
-              [src]="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl"
-              [alt]="e.name"
-            />
-          </ion-avatar>
+        <div
+          class="enemy-card"
+          *ngFor="let e of enemigos"
+          (click)="openEnemyDetail(e)"
+        >
+          <div class="enemy-main">
+            <div class="enemy-avatar" *ngIf="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl">
+              <img
+                [src]="e.spriteGifUrl || e.spriteStillUrl || e.imageFullUrl"
+                [alt]="e.name"
+              />
+            </div>
 
-          <ion-label>
-            <h2>{{ e.name }}</h2>
-            <p>{{ e.description }}</p>
-            <p style="font-size: 0.7rem; opacity: 0.7">
-              Dominio: {{ e.domainId || 'desconocido' }}
-            </p>
-          </ion-label>
-        </ion-item>
+            <div class="enemy-info">
+              <h3>{{ e.name }}</h3>
+              <p class="enemy-meta">
+                Dominio: {{ e.domainId || 'desconocido' }}
+              </p>
+              <p class="enemy-text">
+                {{ e.description || 'Sin descripción' }}
+              </p>
+            </div>
+          </div>
+        </div>
       </ng-container>
 
       <ng-template #loading>
-        <p style="margin-top: 1rem; opacity: 0.7">Cargando enemigos...</p>
+        <p class="enemy-loading">Cargando enemigos...</p>
       </ng-template>
-    </ion-list>
+    </div>
   </div>
+
+  <!-- MODAL DETALLE ENEMIGO -->
+  <ion-modal
+    [isOpen]="enemyModalOpen"
+    (didDismiss)="closeEnemyModal()"
+    class="enemy-modal"
+  >
+    <ng-template>
+      <ion-header translucent="true">
+        <ion-toolbar class="enemy-modal-toolbar">
+          <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="closeEnemyModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="enemy-modal-title">
+            {{ selectedEnemy?.name || 'Enemigo' }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="enemy-modal-content" fullscreen="true">
+        <div class="enemy-modal-inner" *ngIf="selectedEnemy as en">
+
+          <!-- HERO -->
+          <div class="enemy-hero">
+            <div class="enemy-portrait">
+              <ng-container *ngIf="en.spriteStillUrl || en.spriteGifUrl || en.imageFullUrl; else portraitFallback">
+                <img
+                  [src]="en.spriteStillUrl || en.spriteGifUrl || en.imageFullUrl"
+                  [alt]="en.name"
+                />
+              </ng-container>
+              <ng-template #portraitFallback>
+                <ion-icon name="skull-outline"></ion-icon>
+              </ng-template>
+            </div>
+
+            <div class="enemy-hero-text">
+              <h2>{{ en.name }}</h2>
+              <div class="enemy-tags">
+                <span class="enemy-tag enemy-tag--domain">
+                  {{ en.domainId || 'Dominio desconocido' }}
+                </span>
+                <span class="enemy-tag enemy-tag--slug" *ngIf="en.slug">
+                  {{ en.slug }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COMPORTAMIENTO -->
+          <div class="enemy-section-card" *ngIf="en.behavior">
+            <div class="enemy-section-header">
+              <ion-icon name="trail-sign-outline"></ion-icon>
+              <span>Comportamiento</span>
+            </div>
+            <p class="enemy-section-text">
+              {{ en.behavior }}
+            </p>
+          </div>
+
+          <!-- SPRITE GIF -->
+          <div class="enemy-gif-card" *ngIf="en.spriteGifUrl">
+            <div class="enemy-section-header">
+              <ion-icon name="flame-outline"></ion-icon>
+              <span>Sprite animado</span>
+            </div>
+            <div class="enemy-gif-frame">
+              <img [src]="en.spriteGifUrl" [alt]="en.name + ' sprite gif'" />
+            </div>
+          </div>
+
+          <!-- IMAGEN FULL -->
+          <div class="enemy-image-card" *ngIf="en.imageFullUrl">
+            <div class="enemy-section-header">
+              <ion-icon name="image-outline"></ion-icon>
+              <span>Arte completo</span>
+            </div>
+            <div class="enemy-image-frame">
+              <img [src]="en.imageFullUrl" [alt]="en.name + ' arte completo'" />
+            </div>
+          </div>
+
+          <!-- DESCRIPCIÓN -->
+          <div class="enemy-section-card enemy-desc-card">
+            <div class="enemy-section-header">
+              <ion-icon name="book-outline"></ion-icon>
+              <span>Descripción</span>
+            </div>
+            <p class="enemy-section-text">
+              {{ en.description || 'Sin descripción disponible.' }}
+            </p>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -12,65 +12,70 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadChildren: () =>
-      import('./pages/home/home.module').then(m => m.HomePageModule),
+      import('./pages/home/home.module').then((m) => m.HomePageModule),
   },
-
 
   {
     path: 'lore',
     loadChildren: () =>
-      import('./pages/lore/lore.module').then(m => m.LorePageModule),
+      import('./pages/lore/lore.module').then((m) => m.LorePageModule),
   },
   {
     path: 'personajes',
     loadChildren: () =>
       import('./pages/personajes/personajes.module').then(
-        m => m.PersonajesPageModule,
+        (m) => m.PersonajesPageModule,
       ),
   },
   {
     path: 'enemigos',
     loadChildren: () =>
       import('./pages/enemigos/enemigos.module').then(
-        m => m.EnemigosPageModule,
+        (m) => m.EnemigosPageModule,
       ),
   },
   {
     path: 'emblemas',
     loadChildren: () =>
       import('./pages/emblemas/emblemas.module').then(
-        m => m.EmblemasPageModule,
+        (m) => m.EmblemasPageModule,
       ),
   },
   {
     path: 'dominio',
     loadChildren: () =>
-      import('./pages/dominio/dominio.module').then(m => m.DominioPageModule),
+      import('./pages/dominio/dominio.module').then((m) => m.DominioPageModule),
   },
 
   {
     path: 'noticias',
     loadChildren: () =>
       import('./pages/noticias/noticias.module').then(
-        m => m.NoticiasPageModule,
+        (m) => m.NoticiasPageModule,
       ),
   },
   {
     path: 'comunidad',
     loadChildren: () =>
       import('./pages/comunidad/comunidad.module').then(
-        m => m.ComunidadPageModule,
+        (m) => m.ComunidadPageModule,
       ),
+  },
+
+  // CHAT PRIVADO
+  {
+    path: 'chat/:uid',
+    loadChildren: () =>
+      import('./pages/chat/chat.module').then((m) => m.ChatPageModule),
   },
 
   // PERFIL (login / registro)
   {
     path: 'perfil',
     loadChildren: () =>
-      import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule),
+      import('./pages/perfil/perfil.module').then((m) => m.PerfilPageModule),
   },
 
- 
   {
     path: '**',
     redirectTo: 'inicio',

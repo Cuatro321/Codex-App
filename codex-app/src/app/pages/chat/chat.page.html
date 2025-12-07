@@ -1,0 +1,87 @@
+<ion-header translucent="true">
+  <ion-toolbar class="nexo-toolbar">
+    <ion-buttons slot="start">
+      <!-- Solo icono, sin texto "Back" -->
+      <ion-back-button
+        defaultHref="/comunidad"
+        text=""
+        icon="chevron-back-outline"
+      ></ion-back-button>
+    </ion-buttons>
+
+    <!-- Cabecera tipo WhatsApp -->
+    <div class="chat-header">
+      <!-- Solo mostramos avatar si ya tenemos perfil -->
+      <ng-container *ngIf="friendProfile as fp; else headerFallback">
+        <ion-avatar class="chat-avatar">
+          <img [src]="fp.avatarUrl || 'assets/img/avatar-default.png'" />
+        </ion-avatar>
+
+        <div class="chat-header-info">
+          <div class="chat-header-name">
+            {{ fp.displayName || fp.username || 'Chat' }}
+          </div>
+          <div
+            class="chat-header-status"
+            [class.online]="isOnline(fp)"
+          >
+            {{ isOnline(fp) ? 'En línea' : 'Desconectado' }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Si todavía no hay datos del perfil -->
+      <ng-template #headerFallback>
+        <div class="chat-header-info">
+          <div class="chat-header-name">Chat</div>
+          <div class="chat-header-status">Conectando…</div>
+        </div>
+      </ng-template>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" class="chat-page">
+  <div class="chat-container">
+    <div *ngIf="messages.length === 0" class="chat-empty">
+      <p>Empieza la conversación. Los mensajes se eliminan a las 24&nbsp;horas.</p>
+    </div>
+
+    <div class="chat-messages">
+      <div
+        *ngFor="let msg of messages"
+        class="chat-bubble"
+        [class.mine]="isMine(msg)"
+      >
+        <div class="bubble-text">
+          {{ msg.text }}
+        </div>
+        <div class="bubble-time">
+          {{
+            msg.createdAt?.toDate
+              ? (msg.createdAt.toDate() | date: 'shortTime')
+              : (msg.createdAt | date: 'shortTime')
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="chat-toolbar">
+    <ion-item lines="none" class="chat-input-item">
+      <ion-textarea
+        autoGrow="true"
+        placeholder="Escribe un mensaje..."
+        [(ngModel)]="newMessage"
+        (keyup.enter)="send()"
+      ></ion-textarea>
+      <ion-buttons slot="end">
+        <ion-button (click)="send()" class="send-button">
+          <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

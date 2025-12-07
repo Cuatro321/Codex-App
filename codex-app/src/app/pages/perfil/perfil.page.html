@@ -1,3 +1,4 @@
+<!-- src/app/pages/perfil/perfil.page.html -->
 <ion-header translucent="true">
   <ion-toolbar class="nexo-toolbar">
     <ion-buttons slot="start">
@@ -9,11 +10,9 @@
 
 <ion-content class="perfil-page" fullscreen="true">
   <div class="ion-padding">
-
     <!-- SI HAY USUARIO: PERFIL + EDICIÓN -->
     <ng-container *ngIf="user$ | async as user; else authForm">
-
-      <!-- Cabecera del perfil -->
+      <!-- Cabecera -->
       <div class="profile-header">
         <div class="profile-main">
           <div class="profile-avatar">
@@ -39,10 +38,12 @@
 
       <!-- Editor de perfil -->
       <div class="profile-editor">
-
-        <!-- Columna izquierda: Perfil público -->
-        <div class="editor-card">
+        <!-- Columna izquierda -->
+        <div class="editor-card editor-card--left">
           <h3 class="section-title">Perfil público</h3>
+          <p class="section-subtitle">
+            Esta información se mostrará a otros viajeros del Nexo.
+          </p>
 
           <div class="avatar-edit">
             <div class="avatar-preview">
@@ -70,7 +71,10 @@
               </ion-button>
 
               <ion-item lines="none" class="remove-avatar">
-                <ion-checkbox slot="start" [(ngModel)]="removeAvatar"></ion-checkbox>
+                <ion-checkbox
+                  slot="start"
+                  [(ngModel)]="removeAvatar"
+                ></ion-checkbox>
                 <ion-label>Quitar avatar</ion-label>
               </ion-item>
             </div>
@@ -78,8 +82,12 @@
 
           <ion-item lines="none" class="field-item">
             <ion-label position="stacked">Nombre para mostrar</ion-label>
-            <ion-input [(ngModel)]="displayName"></ion-input>
+            <ion-input
+              [(ngModel)]="displayName"
+              placeholder="Cómo te verán otros jugadores"
+            ></ion-input>
           </ion-item>
+          <p class="field-hint">Aparecerá en la comunidad y en el chat.</p>
 
           <ion-item lines="none" class="field-item">
             <ion-label position="stacked">Bio</ion-label>
@@ -87,22 +95,35 @@
               autoGrow="true"
               rows="3"
               [(ngModel)]="bio"
+              placeholder="Cuenta quién eres dentro del Nexo..."
             ></ion-textarea>
           </ion-item>
+          <p class="field-hint">
+            Una breve descripción de tu guardián del Nexo.
+          </p>
         </div>
 
-        <!-- Columna derecha: Información básica -->
-        <div class="editor-card">
+        <!-- Columna derecha -->
+        <div class="editor-card editor-card--right">
           <h3 class="section-title">Información básica</h3>
+          <p class="section-subtitle">
+            Ubicación del eco. Se muestra junto a tu perfil.
+          </p>
 
           <ion-item lines="none" class="field-item">
             <ion-label position="stacked">Ciudad</ion-label>
-            <ion-input [(ngModel)]="city"></ion-input>
+            <ion-input
+              [(ngModel)]="city"
+              placeholder="Ej. Neo Ciudad, El Nexo"
+            ></ion-input>
           </ion-item>
 
           <ion-item lines="none" class="field-item">
             <ion-label position="stacked">País</ion-label>
-            <ion-input [(ngModel)]="country"></ion-input>
+            <ion-input
+              [(ngModel)]="country"
+              placeholder="Ej. NexoPaís"
+            ></ion-input>
           </ion-item>
 
           <div class="buttons-row">
@@ -111,6 +132,7 @@
               color="warning"
               (click)="onSaveProfile(user)"
               [disabled]="profileSaveLoading"
+              class="btn-save-nexo"
             >
               <ion-spinner
                 *ngIf="profileSaveLoading"
@@ -118,16 +140,6 @@
                 slot="start"
               ></ion-spinner>
               Guardar cambios
-            </ion-button>
-
-            <ion-button
-              expand="block"
-              fill="outline"
-              color="medium"
-              (click)="onResetProfile(user)"
-              [disabled]="profileSaveLoading"
-            >
-              Cancelar
             </ion-button>
           </div>
 
@@ -156,7 +168,12 @@
     <!-- SI NO HAY USUARIO: FORMULARIO LOGIN / REGISTRO -->
     <ng-template #authForm>
       <div class="auth-card">
-        <ion-segment [(ngModel)]="mode" value="login">
+        <h2 class="auth-title">Accede al Nexo</h2>
+        <p class="auth-subtitle">
+          Usa tu correo y una contraseña para entrar o forjar una nueva cuenta.
+        </p>
+
+        <ion-segment [(ngModel)]="mode" value="login" class="auth-segment">
           <ion-segment-button value="login">
             <ion-label>Iniciar sesión</ion-label>
           </ion-segment-button>
@@ -165,8 +182,9 @@
           </ion-segment-button>
         </ion-segment>
 
-        <ion-list lines="none" style="margin-top: 1rem;">
-          <ion-item>
+        <ion-list lines="none" class="auth-form">
+          <ion-item class="auth-field">
+            <ion-icon slot="start" name="mail-outline"></ion-icon>
             <ion-label position="stacked">Correo electrónico</ion-label>
             <ion-input
               type="email"
@@ -175,12 +193,13 @@
             ></ion-input>
           </ion-item>
 
-          <ion-item>
+          <ion-item class="auth-field">
+            <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
             <ion-label position="stacked">Contraseña</ion-label>
             <ion-input
               type="password"
               [(ngModel)]="password"
-              placeholder="••••••••"
+              placeholder="Escribe tu contraseña"
             ></ion-input>
           </ion-item>
         </ion-list>
